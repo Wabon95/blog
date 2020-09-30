@@ -23,9 +23,4 @@ $router->map('POST', '/sign_up', [
     'SignUpTreatment'
 );
 
-$router->map('GET', '/sign_in', 'UserController#signIn'); // Formulaire de connexion
-$router->map('POST', '/sign_in', 'UserController#signIn'); // Traitement du formulaire de connexion
-
-$router->map('GET', '/sign_out', 'UserController#signOut'); // Déconnexion
-
 return $router;
