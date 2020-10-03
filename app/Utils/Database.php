@@ -3,15 +3,19 @@
 namespace App\Utils;
 
 abstract class Database {
-    private static $pdo;
+    protected static $pdo;
 
     protected static function dbConnect() {
-        if (self::$pdo) {
-            return self::$pdo;
-        } else {
-            self::$pdo = new \PDO("mysql:host=localhost;dbname=blog", 'root', '');
-            self::$pdo->setAttribute(\PDO::ATTR_ERRMODE , \PDO::ERRMODE_WARNING);
-            return self::$pdo;
+        try {
+            if (!self::$pdo) {
+                self::$pdo = new \PDO("mysql:host=localhost;dbname=blog", 'root', '');
+                self::$pdo->setAttribute(\PDO::ATTR_ERRMODE , \PDO::ERRMODE_EXCEPTION);
+                return self::$pdo;
+            } else {
+                return self::$pdo;
+            }
+        } catch (\PDOException $e) {
+            echo "Une erreur est survenue : <br>" . $e->getMessage();
         }
     }
 }
