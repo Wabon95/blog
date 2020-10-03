@@ -1,7 +1,7 @@
 <div class="container">
 
     <form id="form-signin" action="/sign_up" method="post">
-        <h2>Inscription</h2>
+        <h2><?= $page_title ?></h2>
         <!-- <label for="inputEmail" class="sr-only">Adresse email</label> -->
         <input type="email" id="inputEmail" name="inputEmail" class="form-control mb-3" placeholder="Veuillez renseigner votre adresse email" required autofocus>
 
