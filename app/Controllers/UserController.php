@@ -13,7 +13,7 @@ class UserController extends CoreController {
     }
 
     public function signUpTreatment() {
-        if($_POST) {
+        if ($_POST) {
             $user = new User();
             $user
                 ->setEmail($_POST['inputEmail'])
@@ -21,6 +21,24 @@ class UserController extends CoreController {
             ;
             $user->insert();
         }
+        $this->redirect('/');
+    }
+
+    public function login() {
+        $this->render('user.login', [
+            'page_title' => "Se connecter"
+        ]);
+    }
+
+    public function loginTreatment() {
+        if ($_POST) {
+            User::connectUser($_POST['inputEmail'], $_POST['inputPassword']);
+        }
+        $this->redirect('/');
+    }
+
+    public function logout() {
+        User::disconnectUser();
         $this->redirect('/');
     }
 }

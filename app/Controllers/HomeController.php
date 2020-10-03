@@ -10,6 +10,6 @@ class HomeController extends CoreController {
         $this->render('home', [
             'page_title' => 'Accueil',
             'flash_messages' => FlashMessages::getMessages()
-            ]);
+        ]);
     }
 }

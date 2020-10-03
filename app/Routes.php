@@ -23,4 +23,25 @@ $router->map('POST', '/sign_up', [
     'SignUpTreatment'
 );
 
+$router->map('GET', '/login', [
+        'controller' => 'App\Controllers\UserController',
+        'method' => 'login'
+    ],
+    'Login'
+);
+
+$router->map('POST', '/login', [
+    'controller' => 'App\Controllers\UserController',
+    'method' => 'loginTreatment'
+    ],
+    'LoginTreatment'
+);
+
+$router->map('GET', '/logout', [
+    'controller' => 'App\Controllers\UserController',
+    'method' => 'logout'
+    ],
+    'Logout'
+);
+
 return $router;

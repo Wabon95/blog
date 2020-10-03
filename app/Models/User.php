@@ -34,6 +34,21 @@ class User extends Database {
         return $sth->fetchObject(__CLASS__);
     }
 
+    public static function connectUser(string $email, string $password) {
+        if ($user = User::findByEmail($email)) {
+            if (password_verify($password, $user->getPassword())) {
+                $_SESSION['user'] = $user;
+                return $user;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public static function disconnectUser() {
+        if (isset($_SESSION['user'])) unset($_SESSION['user']);
+    }
+
     private function validator() {
         $errors = false;
         if (!filter_var($this->getEmail(), FILTER_VALIDATE_EMAIL)) {
