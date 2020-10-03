@@ -11,9 +11,8 @@ abstract class Database {
                 self::$pdo = new \PDO("mysql:host=localhost;dbname=blog", 'root', '');
                 self::$pdo->setAttribute(\PDO::ATTR_ERRMODE , \PDO::ERRMODE_EXCEPTION);
                 return self::$pdo;
-            } else {
-                return self::$pdo;
             }
+            return self::$pdo;
         } catch (\PDOException $e) {
             echo "Une erreur est survenue : <br>" . $e->getMessage();
         }
