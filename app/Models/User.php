@@ -11,12 +11,16 @@ class User extends Database {
     private string $password;
 
     public function insert() {
+
         if (!$this->findByEmail($this->email)) {
-            $db = Database::dbConnect();
-            $sth = $db->prepare("INSERT INTO `user` (email, password) VALUES (:email, :password)");
-            $sth->bindParam(':email', $this->email, $db::PARAM_STR);
-            $sth->bindParam(':password', $this->password, $db::PARAM_STR);
-            $sth->execute();
+            if ($this->validator()) {
+                $db = Database::dbConnect();
+                $sth = $db->prepare("INSERT INTO `user` (email, password) VALUES (:email, :password)");
+                $hashedPassword = password_hash($this->password, PASSWORD_BCRYPT);
+                $sth->bindParam(':email', $this->email, $db::PARAM_STR);
+                $sth->bindParam(':password', $hashedPassword, $db::PARAM_STR);
+                $sth->execute();
+            }
         } else {
             FlashMessages::addMessage("Cette adresse email est déjà utilisé.", 'danger');
         }
@@ -28,6 +32,19 @@ class User extends Database {
         $sth->bindParam(':email', $email, $db::PARAM_STR);
         $sth->execute();
         return $sth->fetchObject(__CLASS__);
+    }
+
+    private function validator() {
+        $errors = false;
+        if (!filter_var($this->getEmail(), FILTER_VALIDATE_EMAIL)) {
+            FlashMessages::addMessage("Votre adresse email n'est pas valide.", 'warning');
+            $errors = true;
+        }
+        if (strlen($this->getPassword()) < 8) {
+            FlashMessages::addMessage("Votre mot de passe doit contenir au moins 8 caractères.", 'warning');
+            $errors = true;
+        }
+        return !$errors;
     }
 
     // GETTERS
@@ -43,17 +60,11 @@ class User extends Database {
 
     // SETTERS
     public function setEmail(string $email) {
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->email = htmlspecialchars($email);
-        }
+        $this->email = htmlspecialchars($email);
         return $this;
     }
     public function setPassword(string $password) {
-        if (strlen($password) > 7) {
-            $this->password = password_hash($password, PASSWORD_BCRYPT);
-        } else {
-            FlashMessages::addMessage("Votre mot de passe doit contenir au moins 8 caractères.", 'danger');
-        }
+        $this->password = $password;
         return $this;
     }
 }

@@ -1,3 +1,6 @@
+<?php
+// TODO: Faire un système de requête Ajax afin de vérifier le formulaire, pour éviter d'avoir à envoyer le formulaire pour le vérifier
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
