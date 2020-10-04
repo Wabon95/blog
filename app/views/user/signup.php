@@ -13,3 +13,5 @@
     </form>
 
 </div>
+
+<script src="/js/signup.js"></script>

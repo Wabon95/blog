@@ -40,8 +40,10 @@ class User extends Database {
                 $_SESSION['user'] = $user;
                 return $user;
             }
+            FlashMessages::addMessage("Mot de passe incorrect.", 'warning');
             return false;
         }
+        FlashMessages::addMessage("Utilisateur non trouvé.", 'warning');
         return false;
     }
 
