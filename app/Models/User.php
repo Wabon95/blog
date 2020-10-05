@@ -11,7 +11,6 @@ class User extends Database {
     private string $password;
 
     public function insert() {
-
         if (!$this->findByEmail($this->email)) {
             if ($this->validator()) {
                 $db = Database::dbConnect();
@@ -20,6 +19,7 @@ class User extends Database {
                 $sth->bindParam(':email', $this->email, $db::PARAM_STR);
                 $sth->bindParam(':password', $hashedPassword, $db::PARAM_STR);
                 $sth->execute();
+                FlashMessages::addMessage("Votre compte à correctement été créé.", 'success');
             }
         } else {
             FlashMessages::addMessage("Cette adresse email est déjà utilisé.", 'danger');

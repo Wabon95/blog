@@ -21,7 +21,7 @@ class UserController extends CoreController {
             ;
             $user->insert();
         }
-        $this->redirect('/');
+        $this->redirect('/login');
     }
 
     public function login() {
