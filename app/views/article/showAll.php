@@ -4,4 +4,7 @@
 </p>
 
 <?php
-dump($articles);
+
+foreach ($articles as $article) {
+    include('_article.php');
+}

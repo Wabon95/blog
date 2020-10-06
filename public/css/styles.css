@@ -1,6 +1,23 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    background-color: #f7f8f8;
+}
+
 #form-signin {
     width: 100%;
     max-width: 330px;
     padding: 15px;
     margin: auto;
+}
+
+.article {
+    background-color: #fff;
+}
+
+a, a:hover {
+    color: black;
+}
+a:hover {
+    text-decoration: underline;
 }

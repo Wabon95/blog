@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\Article;
-use Cocur\Slugify\Slugify;
 
 class ArticleController extends CoreController {
 
@@ -14,16 +13,11 @@ class ArticleController extends CoreController {
         ]);
     }
 
-    public function show($articleTitle) {
-
-        // TODO: trouver un système pour que cette merde se fasse automatiquement
-        $articleTitle = str_replace('-', ' ', $articleTitle); // Modification du slug dans l'url, pour pouvoir appeller la fonction suivante et qu'elle matche avec une entrée en BDD
-        $article = Article::findByTitle($articleTitle);
-        // TODO: trouver un système pour que cette merde se fasse automatiquement
-
+    public function show($articleSlug) {
+        $article = Article::findBySlug($articleSlug);
         $this->render('article.show', [
-            'page_title' => 'Article',
-            'article' => Article::findByTitle($articleTitle)
+            'page_title' => $article->getTitle(),
+            'article' => $article
         ]);
     }
 
@@ -35,8 +29,7 @@ class ArticleController extends CoreController {
                 ->setContent($_POST['inputContent'])
             ;
             $article->insert();
-            $slugify = new Slugify();
-            $this->redirect('/articles/' . $slugify->slugify($article->getTitle()));
+            $this->redirect('/articles/' . $article->getSlug());
         }
         $this->render('article.add', [
             'page_title' => 'Ajouter un article'

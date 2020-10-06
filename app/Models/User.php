@@ -59,6 +59,10 @@ class User extends Database {
         if (isset($_SESSION['user'])) unset($_SESSION['user']);
     }
 
+    public static function getConnectedUser() {
+        if (isset($_SESSION['user'])) return $_SESSION['user'];
+    }
+
     private function validator() {
         $errors = false;
         if (!filter_var($this->getEmail(), FILTER_VALIDATE_EMAIL)) {

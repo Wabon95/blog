@@ -3,20 +3,23 @@
 namespace App\Models;
 
 use App\Utils\Database;
+use Cocur\Slugify\Slugify;
 use App\Utils\FlashMessages;
 
 class Article extends Database {
     private int $id;
     private string $title;
+    private string $slug;
     private string $content;
     private $created_at;
 
     public function insert() {
         $db = Database::dbConnect();
-        $sth = $db->prepare("INSERT INTO `article` (title, content, created_at) VALUES (:title, :content, :created_at)");
+        $sth = $db->prepare("INSERT INTO `article` (title, slug, content, created_at) VALUES (:title, :slug, :content, :created_at)");
         $this->created_at = new \DateTime();
         $createdAt = $this->created_at->format('Y-m-d H:i:s');
         $sth->bindParam(':title', $this->title, $db::PARAM_STR);
+        $sth->bindParam(':slug', $this->slug, $db::PARAM_STR);
         $sth->bindParam(':content', $this->content, $db::PARAM_STR);
         $sth->bindParam(':created_at', $createdAt, $db::PARAM_STR);
         $sth->execute();
@@ -36,10 +39,10 @@ class Article extends Database {
         return false;
     }
 
-    public static function findByTitle(string $title) {
+    public static function findBySlug(string $slug) {
         $db = Database::dbConnect();
-        $sth = $db->prepare("SELECT * FROM `article` WHERE title = :title");
-        $sth->bindParam(':title', $title, $db::PARAM_STR);
+        $sth = $db->prepare("SELECT * FROM `article` WHERE slug = :slug");
+        $sth->bindParam(':slug', $slug, $db::PARAM_STR);
         $sth->execute();
         $article = $sth->fetchObject(__CLASS__);
         if (is_object($article)) {
@@ -70,20 +73,33 @@ class Article extends Database {
     public function getTitle() {
         return $this->title;
     }
+    public function getSlug() {
+        return $this->slug;
+    }
     public function getContent() {
         return $this->content;
     }
     public function getCreatedAt() {
         return $this->created_at;
     }
+    public function getLink() {
+        $slugify = new Slugify();
+        $link = '/articles/' . $slugify->slugify($this->getTitle());
+        return $link;
+    }
 
     // SETTERS
     public function setTitle(string $title) {
         $this->title = htmlspecialchars($title);
+        $this->setSlug($title);
         return $this;
     }
     public function setContent(string $content) {
         $this->content = htmlspecialchars($content);
         return $this;
+    }
+    private function setSlug(string $title) {
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($title);
     }
 }
