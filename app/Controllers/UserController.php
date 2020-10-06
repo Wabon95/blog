@@ -17,6 +17,7 @@ class UserController extends CoreController {
             $user = new User();
             $user
                 ->setEmail($_POST['inputEmail'])
+                ->setNickname($_POST['inputNickname'])
                 ->setPassword($_POST['inputPassword'])
             ;
             $user->insert();

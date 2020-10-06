@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use App\Utils\Database;
 use App\Utils\FlashMessages;
 
@@ -11,6 +12,7 @@ class CoreController extends Database {
         $view = str_replace('.', '/', $view);
         extract($data);
         $flash_messages = FlashMessages::getMessages();
+        $user = User::getConnectedUser();
         require_once __DIR__.'/../views/header.php';
         require_once __DIR__.'/../views/'.$view.'.php';
         require_once __DIR__.'/../views/footer.php';

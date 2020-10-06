@@ -8,15 +8,17 @@ use App\Utils\FlashMessages;
 class User extends Database {
     private int $id;
     private string $email;
+    private string $nickName;
     private string $password;
 
     public function insert() {
         if (!$this->findByEmail($this->email)) {
             if ($this->validator()) {
                 $db = Database::dbConnect();
-                $sth = $db->prepare("INSERT INTO `user` (email, password) VALUES (:email, :password)");
+                $sth = $db->prepare("INSERT INTO `user` (email, nickname, password) VALUES (:email, :nickname, :password)");
                 $hashedPassword = password_hash($this->password, PASSWORD_BCRYPT);
                 $sth->bindParam(':email', $this->email, $db::PARAM_STR);
+                $sth->bindParam(':nickname', $this->nickname, $db::PARAM_STR);
                 $sth->bindParam(':password', $hashedPassword, $db::PARAM_STR);
                 $sth->execute();
                 FlashMessages::addMessage("Votre compte à correctement été créé.", 'success');
@@ -45,7 +47,10 @@ class User extends Database {
     public static function connectUser(string $email, string $password) {
         if ($user = User::findByEmail($email)) {
             if (password_verify($password, $user->getPassword())) {
-                $_SESSION['user'] = $user;
+                $_SESSION['user'] = [
+                    'email' => $user->getEmail(),
+                    'password' => $user->getPassword()
+                ];
                 return $user;
             }
             FlashMessages::addMessage("Mot de passe incorrect.", 'warning');
@@ -60,7 +65,10 @@ class User extends Database {
     }
 
     public static function getConnectedUser() {
-        if (isset($_SESSION['user'])) return $_SESSION['user'];
+        if (isset($_SESSION['user'])) {
+            $user = User::findByEmail($_SESSION['user']['email']);
+            return $user;
+        }
     }
 
     private function validator() {
@@ -83,6 +91,9 @@ class User extends Database {
     public function getEmail() {
         return $this->email;
     }
+    public function getNickname() {
+        return $this->nickname;
+    }
     public function getPassword() {
         return $this->password;
     }
@@ -90,6 +101,10 @@ class User extends Database {
     // SETTERS
     public function setEmail(string $email) {
         $this->email = htmlspecialchars($email);
+        return $this;
+    }
+    public function setNickname(string $nickname) {
+        $this->nickname = htmlspecialchars($nickname);
         return $this;
     }
     public function setPassword(string $password) {

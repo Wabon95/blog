@@ -25,9 +25,9 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <?php if (isset($_SESSION['user'])): ?> 
+                    <?php if (isset($user)): ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="/profile">Mon profil</a>
+                            <a class="nav-link" href="/profile">Bonjour <?= $user->getNickname() ?></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/logout">Se déconnecter</a>
