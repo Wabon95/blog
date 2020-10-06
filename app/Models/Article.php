@@ -1,7 +1,5 @@
 <?php
 
-// TODO: Récupérer la date depuis la BDD en format DateTime
-
 namespace App\Models;
 
 use App\Utils\Database;
@@ -30,9 +28,40 @@ class Article extends Database {
         $sth = $db->prepare("SELECT * FROM `article` WHERE id = :id");
         $sth->bindParam(':id', $id, $db::PARAM_INT);
         $sth->execute();
-        return $sth->fetchObject(__CLASS__);
+        $article = $sth->fetchObject(__CLASS__);
+        if (is_object($article)) {
+            $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
+            return $article;
+        }
+        return false;
     }
 
+    public static function findByTitle(string $title) {
+        $db = Database::dbConnect();
+        $sth = $db->prepare("SELECT * FROM `article` WHERE title = :title");
+        $sth->bindParam(':title', $title, $db::PARAM_STR);
+        $sth->execute();
+        $article = $sth->fetchObject(__CLASS__);
+        if (is_object($article)) {
+            $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
+            return $article;
+        }
+        return false;
+    }
+
+    public static function findAll(int $limit = 20) {
+        $db = Database::dbConnect();
+        $sth = $db->prepare("SELECT * FROM `article` ORDER BY created_at DESC LIMIT $limit");
+        $sth->execute();
+        $articles = [];
+        while ($article = $sth->fetchObject(__CLASS__)) {
+            if (is_object($article)) {
+                $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
+                $articles[] = $article;
+            }
+        }
+        return $articles;
+    }
 
     // GETTERS
     public function getId() {
@@ -50,11 +79,11 @@ class Article extends Database {
 
     // SETTERS
     public function setTitle(string $title) {
-        $this->title = $title;
+        $this->title = htmlspecialchars($title);
         return $this;
     }
     public function setContent(string $content) {
-        $this->content = $content;
+        $this->content = htmlspecialchars($content);
         return $this;
     }
 }

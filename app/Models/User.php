@@ -26,6 +26,14 @@ class User extends Database {
         }
     }
 
+    public static function find(int $id) {
+        $db = Database::dbConnect();
+        $sth = $db->prepare("SELECT * FROM `user` WHERE id = :id");
+        $sth->bindParam(':id', $id, $db::PARAM_INT);
+        $sth->execute();
+        return $sth->fetchObject(__CLASS__);
+    }
+
     public static function findByEmail(string $email) {
         $db = Database::dbConnect();
         $sth = $db->prepare("SELECT * FROM `user` WHERE email = :email");

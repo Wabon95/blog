@@ -44,4 +44,24 @@ $router->map('GET', '/logout', [
     'Logout'
 );
 
+$router->map('GET', '/articles', [
+    'controller' => 'App\Controllers\ArticleController',
+    'method' => 'showAll'
+    ],
+    'showArticles'
+);
+
+$router->map('GET|POST', '/articles/add', [
+    'controller' => 'App\Controllers\ArticleController',
+    'method' => 'add'
+    ],
+    'addArticle'
+);
+$router->map('GET', '/articles/[*:articleTitle]', [
+    'controller' => 'App\Controllers\ArticleController',
+    'method' => 'show'
+    ],
+    'showArticle'
+);
+
 return $router;
