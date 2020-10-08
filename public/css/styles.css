@@ -13,6 +13,7 @@ body {
 
 .article {
     background-color: #fff;
+    border-radius: 10px 0 10px 0;
 }
 
 a, a:hover {
