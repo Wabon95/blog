@@ -3,5 +3,6 @@
 
     <div class="content">
         <?= $article->getContent() ?>
+        <p class="text-right">Ecrit par <?= $article->getAuthor()->getNickname() ?></p>
     </div>
 </div>
