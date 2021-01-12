@@ -32,9 +32,7 @@ class UserController extends CoreController {
     }
 
     public function loginTreatment() {
-        if ($_POST) {
-            User::connectUser($_POST['inputEmail'], $_POST['inputPassword']);
-        }
+        if ($_POST) User::connectUser($_POST['inputEmail'], $_POST['inputPassword']);
         $this->redirect('/');
     }
 

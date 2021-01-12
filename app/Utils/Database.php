@@ -8,7 +8,7 @@ abstract class Database {
     protected static function dbConnect() {
         try {
             if (!self::$pdo) {
-                self::$pdo = new \PDO("mysql:host=localhost;dbname=blog", 'blog', 'HGpokn8p3YsQPM6w');
+                self::$pdo = new \PDO("mysql:host=localhost;dbname=blog", 'blog', '5oLRJKzcmyPGid0a');
                 self::$pdo->setAttribute(\PDO::ATTR_ERRMODE , \PDO::ERRMODE_EXCEPTION);
                 return self::$pdo;
             }
