@@ -45,7 +45,7 @@ class Article extends Database {
         $sth->bindParam(':slug', $slug, $db::PARAM_STR);
         $sth->execute();
         $article = $sth->fetchObject(__CLASS__);
-        if (is_object($article)) {
+        if ($article instanceof Article) {
             $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
             return $article;
         }
@@ -58,7 +58,7 @@ class Article extends Database {
         $sth->execute();
         $articles = [];
         while ($article = $sth->fetchObject(__CLASS__)) {
-            if (is_object($article)) {
+            if ($article instanceof Article) {
                 $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
                 $articles[] = $article;
             }
