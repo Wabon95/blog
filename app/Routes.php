@@ -57,7 +57,7 @@ $router->map('GET|POST', '/articles/add', [
     ],
     'addArticle'
 );
-$router->map('GET', '/articles/[*:articleTitle]', [
+$router->map('GET', '/articles/[*:articleSlug]', [
     'controller' => 'App\Controllers\ArticleController',
     'method' => 'show'
     ],
