@@ -23,12 +23,15 @@ USE `blog`;
 -- Structure de la table `article`
 --
 
-CREATE TABLE `article` (
-  `id` int(10) NOT NULL,
+DROP TABLE IF EXISTS `article`;
+CREATE TABLE IF NOT EXISTS `article` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
   `content` text NOT NULL,
-  `created_at` datetime NOT NULL
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -37,9 +40,13 @@ CREATE TABLE `article` (
 -- Structure de la table `user`
 --
 
-CREATE TABLE `user` (
-  `id` int(10) NOT NULL,
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `nickname` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+COMMIT;
