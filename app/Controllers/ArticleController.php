@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use App\Models\Article;
 
 class ArticleController extends CoreController {
@@ -27,6 +28,7 @@ class ArticleController extends CoreController {
             $article
                 ->setTitle($_POST['inputTitle'])
                 ->setContent($_POST['inputContent'])
+                ->setAuthor(User::getConnectedUser())
             ;
             $article->insert();
             $this->redirect('/articles/' . $article->getSlug());
