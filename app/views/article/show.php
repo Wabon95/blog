@@ -1,6 +1,7 @@
 <?php if (isset($user) && $user->getId() == $article->getAuthor()->getId()): ?>
     <p class="text-right">
-        <a class="btn btn-success" href="/articles/edit/<?= $article->getSlug() ?>" role="button">Modifier</a>
+        <a class="btn btn-success" href="/article/editer/<?= $article->getSlug() ?>" role="button">Modifier</a>
+        <a class="btn btn-danger" href="/article/supprimer/<?= $article->getSlug() ?>" role="button">Supprimer</a>
     </p>
 <?php endif; ?>
 

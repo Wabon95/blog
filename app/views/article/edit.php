@@ -1,6 +1,6 @@
 <h2><?= $page_title ?></h2>
 
-<form action="/articles/edit/<?= $article->getSlug() ?>" method="post">
+<form action="/article/editer/<?= $article->getSlug() ?>" method="post">
 
     <div class="form-group">
         <label for="inputTitle">Titre de l'article</label>

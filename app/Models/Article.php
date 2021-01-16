@@ -14,27 +14,37 @@ class Article extends Database {
     private string $content;
     private $author;
     private $created_at;
+    private $updated_at;
 
     public function insert() {
         $db = Database::dbConnect();
         $sth = $db->prepare("INSERT INTO `article` (title, slug, content, author, created_at) VALUES (:title, :slug, :content, :author, :created_at)");
         $this->created_at = new \DateTime();
         $createdAt = $this->created_at->format('Y-m-d H:i:s');
-        $sth->bindParam(':title', $this->title, $db::PARAM_STR);
-        $sth->bindParam(':slug', $this->slug, $db::PARAM_STR);
-        $sth->bindParam(':content', $this->content, $db::PARAM_STR);
-        $sth->bindParam(':author', $this->author->getId(), $db::PARAM_INT);
-        $sth->bindParam(':created_at', $createdAt, $db::PARAM_STR);
-        $sth->execute();
-        FlashMessages::addMessage("Votre article à correctement été ajouté.", 'success');
+        if (!self::findBySlug($this->slug)) {
+            $sth->bindParam(':title', $this->title, $db::PARAM_STR);
+            $sth->bindParam(':slug', $this->slug, $db::PARAM_STR);
+            $sth->bindParam(':content', $this->content, $db::PARAM_STR);
+            $sth->bindParam(':author', $this->author->getId(), $db::PARAM_INT);
+            $sth->bindParam(':created_at', $createdAt, $db::PARAM_STR);
+            $sth->execute();
+            FlashMessages::addMessage("Votre article à correctement été ajouté.", 'success');
+            return true;
+        } else {
+            FlashMessages::addMessage("Un article avec ce même titre existe déjà, veuillez en choisir un autre.", 'warning');
+            return false;
+        }
     }
 
     public function update(int $id) {
         $db = Database::dbConnect();
-        $sth = $db->prepare("UPDATE `article` SET title = :title, slug = :slug, content = :content WHERE article.id = $id");
+        $sth = $db->prepare("UPDATE `article` SET title = :title, slug = :slug, content = :content, updated_at = :updated_at WHERE article.id = $id");
+        $this->updated_at = new \DateTime();
+        $updated_at = $this->updated_at->format('Y-m-d H:i:s');
         $sth->bindParam(':title', $this->title, $db::PARAM_STR);
         $sth->bindParam(':slug', $this->slug, $db::PARAM_STR);
         $sth->bindParam(':content', $this->content, $db::PARAM_STR);
+        $sth->bindParam(':updated_at', $updated_at, $db::PARAM_STR);
         $sth->execute();
         FlashMessages::addMessage("Votre article à correctement été modifié.", 'success');
     }
@@ -55,13 +65,18 @@ class Article extends Database {
 
     public static function findBySlug(string $slug) {
         $db = Database::dbConnect();
-        // $sth = $db->prepare("SELECT article.*, user.id AS userid FROM `article` LEFT JOIN user ON article.author = user.id WHERE article.slug = :slug");
+        // $sth = $db->prepare("SELECT article.*, user.id AS userid, user.* FROM `article` LEFT JOIN user ON article.author = user.id WHERE article.slug = :slug");
         $sth = $db->prepare("SELECT * FROM `article` WHERE slug = :slug");
         $sth->bindParam(':slug', $slug, $db::PARAM_STR);
         $sth->execute();
         $article = $sth->fetchObject(__CLASS__);
         if ($article instanceof Article) {
             $article->author = User::find($article->author);
+            // $article->author = new User();
+            // $article->author->setId($article->userid);
+            // $article->author->setEmail($article->email);
+            // $article->author->setNickname($article->nickname);
+            // $article->author->setPassword($article->password);
             $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
             return $article;
         }
@@ -83,6 +98,12 @@ class Article extends Database {
         return $articles;
     }
 
+    public static function delete(int $id) {
+        $db = Database::dbConnect();
+        $sth = $db->prepare("DELETE FROM `article` WHERE id = $id");
+        $sth->execute();
+    }
+
     // GETTERS
     public function getId() {
         return $this->id;
@@ -101,6 +122,9 @@ class Article extends Database {
     }
     public function getCreatedAt() {
         return $this->created_at;
+    }
+    public function getUpdatedAt() {
+        return $this->updated_at;
     }
     public function getLink() {
         $slugify = new Slugify();

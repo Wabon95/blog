@@ -1,6 +1,6 @@
 <h2><?= $page_title ?></h2>
 
-<form action="/articles/add" method="post">
+<form action="/article/ajouter" method="post">
 
     <div class="form-group">
         <label for="inputTitle">Titre de l'article</label>

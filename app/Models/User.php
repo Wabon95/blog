@@ -99,6 +99,10 @@ class User extends Database {
     }
 
     // SETTERS
+    public function setId(int $id) {
+        $this->id = htmlspecialchars($id);
+        return $this;
+    }
     public function setEmail(string $email) {
         $this->email = htmlspecialchars($email);
         return $this;

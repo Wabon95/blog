@@ -2,74 +2,36 @@
 
 $router = new AltoRouter();
 
-$router->map('GET', '/', [
-        'controller' => 'App\Controllers\HomeController',
-        'method' => 'home'
-    ],
-    'Homepage'
-);
 
-$router->map('GET', '/sign_up', [
-        'controller' => 'App\Controllers\UserController',
-        'method' => 'signUp'
-    ],
-    'SignUp'
-);
+// Homepage
+$router->map('GET', '/', 'App\Controllers\HomeController#home');
 
-$router->map('POST', '/sign_up', [
-        'controller' => 'App\Controllers\UserController',
-        'method' => 'signUpTreatment'
-    ],
-    'SignUpTreatment'
-);
+// SignUp
+$router->addRoutes([
+    ['GET', '/sign_up', 'App\Controllers\UserController#signUp'],
+    ['POST', '/sign_up', 'App\Controllers\UserController#signUpTreatment']
+]);
 
-$router->map('GET', '/login', [
-        'controller' => 'App\Controllers\UserController',
-        'method' => 'login'
-    ],
-    'Login'
-);
+// Login
+$router->addRoutes([
+    ['GET', '/login', 'App\Controllers\UserController#login'],
+    ['POST', '/login', 'App\Controllers\UserController#loginTreatment']
+]);
 
-$router->map('POST', '/login', [
-    'controller' => 'App\Controllers\UserController',
-    'method' => 'loginTreatment'
-    ],
-    'LoginTreatment'
-);
-
-$router->map('GET', '/logout', [
-    'controller' => 'App\Controllers\UserController',
-    'method' => 'logout'
-    ],
-    'Logout'
-);
-
-$router->map('GET', '/articles', [
-    'controller' => 'App\Controllers\ArticleController',
-    'method' => 'showAll'
-    ],
-    'showArticles'
-);
-
-$router->map('GET|POST', '/articles/add', [
-    'controller' => 'App\Controllers\ArticleController',
-    'method' => 'add'
-    ],
-    'addArticle'
-);
-
-$router->map('GET|POST', '/articles/edit/[*:articleSlug]', [
-    'controller' => 'App\Controllers\ArticleController',
-    'method' => 'edit'
-    ],
-    'editArticle'
-);
-
-$router->map('GET', '/articles/[*:articleSlug]', [
-    'controller' => 'App\Controllers\ArticleController',
-    'method' => 'show'
-    ],
-    'showArticle'
-);
+// Logout
+$router->addRoutes([
+    ['GET', '/logout', 'App\Controllers\UserController#logout']
+]);
+    
+// Article
+$router->addRoutes([
+    ['GET', '/article/editer/[*:articleSlug]', 'App\Controllers\ArticleController#editView'],
+    ['POST', '/article/editer/[*:articleSlug]', 'App\Controllers\ArticleController#editTreatment'],
+    ['GET', '/article/supprimer/[*:articleSlug]', 'App\Controllers\ArticleController#deleteTreatment'],
+    ['GET', '/article/ajouter', 'App\Controllers\ArticleController#addView'],
+    ['POST', '/article/ajouter', 'App\Controllers\ArticleController#addTreatment'],
+    ['GET', '/article/[*:articleSlug]', 'App\Controllers\ArticleController#show'],
+    ['GET', '/article', 'App\Controllers\ArticleController#showAll'],
+]);
 
 return $router;

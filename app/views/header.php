@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/articles">Les derniers articles postés</a>
+                        <a class="nav-link" href="/article">Les derniers articles postés</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">

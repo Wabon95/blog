@@ -15,42 +15,57 @@ class ArticleController extends CoreController {
     }
 
     public function show($articleSlug) {
-        $article = Article::findBySlug($articleSlug);
-        $this->render('article.show', [
-            'page_title' => $article->getTitle(),
-            'article' => $article
-        ]);
+        if ($article = Article::findBySlug($articleSlug)) {
+            $this->render('article.show', [
+                'page_title' => $article->getTitle(),
+                'article' => $article
+            ]);
+        } else {
+            $this->redirect('/article');
+        }
     }
 
-    public function add() {
-        if ($_POST) {
-            $article = new Article();
-            $article
-                ->setTitle($_POST['inputTitle'])
-                ->setContent($_POST['inputContent'])
-                ->setAuthor(User::getConnectedUser())
-            ;
-            $article->insert();
-            $this->redirect('/articles/' . $article->getSlug());
-        }
+    public function addView() {
         $this->render('article.add', [
             'page_title' => 'Ajouter un article'
         ]);
     }
 
-    public function edit($articleSlug) {
-        if ($_POST) {
-            $article = Article::findBySlug($articleSlug);
+    public function addTreatment() {
+        $article = new Article();
+        $article
+            ->setTitle($_POST['inputTitle'])
+            ->setContent($_POST['inputContent'])
+            ->setAuthor(User::getConnectedUser())
+        ;
+        if ($article->insert()) $this->redirect('/article/' . $article->getSlug());
+        $this->redirect('/article');
+    }
+
+    public function editView($articleSlug) {
+        $this->render('article.edit', [
+            'page_title' => 'Modifier un article',
+            'article' => Article::findBySlug($articleSlug)
+        ]);
+    }
+
+    public function editTreatment($articleSlug) {
+        if ($article = Article::findBySlug($articleSlug)) {
             $article
                 ->setTitle($_POST['inputTitle'])
                 ->setContent($_POST['inputContent'])
             ;
             $article->update($article->getId());
-            $this->redirect('/articles/' . $article->getSlug());
+            $this->redirect('/article/' . $article->getSlug());
+        } else {
+            $this->redirect('/article');
         }
-        $this->render('article.edit', [
-            'page_title' => 'Modifier un article',
-            'article' => Article::findBySlug($articleSlug)
-        ]);
+    }
+
+    public function deleteTreatment($articleSlug) {
+        if ($article = Article::findBySlug($articleSlug)) {
+            $article->delete($article->getId());
+        }
+        $this->redirect('/article');
     }
 }
