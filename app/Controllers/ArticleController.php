@@ -37,4 +37,20 @@ class ArticleController extends CoreController {
             'page_title' => 'Ajouter un article'
         ]);
     }
+
+    public function edit($articleSlug) {
+        if ($_POST) {
+            $article = Article::findBySlug($articleSlug);
+            $article
+                ->setTitle($_POST['inputTitle'])
+                ->setContent($_POST['inputContent'])
+            ;
+            $article->update($article->getId());
+            $this->redirect('/articles/' . $article->getSlug());
+        }
+        $this->render('article.edit', [
+            'page_title' => 'Modifier un article',
+            'article' => Article::findBySlug($articleSlug)
+        ]);
+    }
 }

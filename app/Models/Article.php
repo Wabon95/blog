@@ -29,6 +29,16 @@ class Article extends Database {
         FlashMessages::addMessage("Votre article à correctement été ajouté.", 'success');
     }
 
+    public function update(int $id) {
+        $db = Database::dbConnect();
+        $sth = $db->prepare("UPDATE `article` SET title = :title, slug = :slug, content = :content WHERE article.id = $id");
+        $sth->bindParam(':title', $this->title, $db::PARAM_STR);
+        $sth->bindParam(':slug', $this->slug, $db::PARAM_STR);
+        $sth->bindParam(':content', $this->content, $db::PARAM_STR);
+        $sth->execute();
+        FlashMessages::addMessage("Votre article à correctement été modifié.", 'success');
+    }
+
     public static function find(int $id) {
         $db = Database::dbConnect();
         $sth = $db->prepare("SELECT * FROM `article` WHERE id = :id");

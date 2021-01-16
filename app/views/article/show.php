@@ -1,3 +1,9 @@
+<?php if (isset($user) && $user->getId() == $article->getAuthor()->getId()): ?>
+    <p class="text-right">
+        <a class="btn btn-success" href="/articles/edit/<?= $article->getSlug() ?>" role="button">Modifier</a>
+    </p>
+<?php endif; ?>
+
 <div class="article mb-4 p-3">
     <h4><?= $article->getTitle() ?></h4>
     <p>Rédigé par <a href="#"><?= $article->getAuthor()->getNickname() ?></a></p>
