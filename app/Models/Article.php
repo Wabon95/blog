@@ -126,11 +126,6 @@ class Article extends Database {
     public function getUpdatedAt() {
         return $this->updated_at;
     }
-    public function getLink() {
-        $slugify = new Slugify();
-        $link = '/articles/' . $slugify->slugify($this->getTitle());
-        return $link;
-    }
 
     // SETTERS
     public function setTitle(string $title) {
