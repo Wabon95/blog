@@ -85,13 +85,22 @@ class Article extends Database {
 
     public static function findAll(int $limit = 20) {
         $db = Database::dbConnect();
-        $sth = $db->prepare("SELECT * FROM `article` ORDER BY created_at DESC LIMIT $limit");
+        $sth = $db->prepare("SELECT * FROM `article` LEFT JOIN user ON article.author = user.id ORDER BY created_at DESC LIMIT $limit");
         $sth->execute();
+
         $articles = [];
         while ($article = $sth->fetchObject(__CLASS__)) {
             if ($article instanceof Article) {
-                $article->author = User::find($article->author);
+                $author = new User();
+                $author
+                    ->setId($article->getAuthor())
+                    ->setEmail($article->email)
+                    ->setNickname($article->nickname)
+                    ->setPassword($article->password)
+                ;
+                $article->setAuthor($author);
                 $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
+                dump($article);
                 $articles[] = $article;
             }
         }
