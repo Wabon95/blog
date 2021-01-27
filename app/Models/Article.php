@@ -49,34 +49,21 @@ class Article extends Database {
         FlashMessages::addMessage("Votre article à correctement été modifié.", 'success');
     }
 
-    public static function find(int $id) {
-        $db = Database::dbConnect();
-        $sth = $db->prepare("SELECT * FROM `article` WHERE id = :id");
-        $sth->bindParam(':id', $id, $db::PARAM_INT);
-        $sth->execute();
-        $article = $sth->fetchObject(__CLASS__);
-        if ($article instanceof Article) {
-            $article->author = User::find($article->author);
-            $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
-            return $article;
-        }
-        return false;
-    }
-
     public static function findBySlug(string $slug) {
         $db = Database::dbConnect();
-        // $sth = $db->prepare("SELECT article.*, user.id AS userid, user.* FROM `article` LEFT JOIN user ON article.author = user.id WHERE article.slug = :slug");
-        $sth = $db->prepare("SELECT * FROM `article` WHERE slug = :slug");
+        $sth = $db->prepare("SELECT * FROM `article` LEFT JOIN user ON article.author = user.id WHERE article.slug = :slug");
         $sth->bindParam(':slug', $slug, $db::PARAM_STR);
         $sth->execute();
         $article = $sth->fetchObject(__CLASS__);
         if ($article instanceof Article) {
-            $article->author = User::find($article->author);
-            // $article->author = new User();
-            // $article->author->setId($article->userid);
-            // $article->author->setEmail($article->email);
-            // $article->author->setNickname($article->nickname);
-            // $article->author->setPassword($article->password);
+            $author = new User();
+            $author
+                ->setId($article->getAuthor())
+                ->setEmail($article->email)
+                ->setNickname($article->nickname)
+                ->setPassword($article->password)
+            ;
+            $article->setAuthor($author);
             $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
             return $article;
         }
@@ -100,7 +87,6 @@ class Article extends Database {
                 ;
                 $article->setAuthor($author);
                 $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
-                dump($article);
                 $articles[] = $article;
             }
         }
