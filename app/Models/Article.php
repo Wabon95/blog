@@ -51,7 +51,13 @@ class Article extends Database {
 
     public static function findBySlug(string $slug) {
         $db = Database::dbConnect();
-        $sth = $db->prepare("SELECT * FROM `article` LEFT JOIN user ON article.author = user.id WHERE article.slug = :slug");
+        $sql = "
+            SELECT article.*, user.email, user.nickname, user.password
+            FROM `article`
+            LEFT JOIN user ON article.author = user.id
+            WHERE article.slug = :slug
+        ";
+        $sth = $db->prepare($sql);
         $sth->bindParam(':slug', $slug, $db::PARAM_STR);
         $sth->execute();
         $article = $sth->fetchObject(__CLASS__);
@@ -70,9 +76,41 @@ class Article extends Database {
         return false;
     }
 
+    public static function find(int $id) {
+        $db = Database::dbConnect();
+        $id = htmlspecialchars($id);
+        $sql = "
+            SELECT article.*, user.email, user.nickname, user.password
+            FROM `article`
+            LEFT JOIN user ON article.author = user.id
+            WHERE article.id = $id
+        ";
+        $sth = $db->prepare($sql);
+        $sth->execute();
+        $article = $sth->fetchObject(__CLASS__);
+        if ($article instanceof Article) {
+            $author = new User();
+            $author
+                ->setId($article->getAuthor())
+                ->setEmail($article->email)
+                ->setNickname($article->nickname)
+                ->setPassword($article->password)
+            ;
+            $article->setAuthor($author);
+            $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
+        }
+        return $article;
+    }
+
     public static function findAll(int $limit = 20) {
         $db = Database::dbConnect();
-        $sth = $db->prepare("SELECT * FROM `article` LEFT JOIN user ON article.author = user.id ORDER BY created_at DESC LIMIT $limit");
+        $sql = "
+            SELECT article.*, user.email, user.nickname, user.password
+            FROM `article`
+            LEFT JOIN user ON article.author = user.id
+            ORDER BY created_at DESC LIMIT $limit
+        ";
+        $sth = $db->prepare($sql);
         $sth->execute();
 
         $articles = [];
@@ -120,6 +158,9 @@ class Article extends Database {
     }
     public function getUpdatedAt() {
         return $this->updated_at;
+    }
+    public function getFormatedDate() {
+        return $this->created_at->format('d/m/Y à H:i');
     }
 
     // SETTERS

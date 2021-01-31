@@ -1,6 +1,6 @@
 ## Todo
-- Voter + sur un article
 - Commenter un article
+- Voter + sur un article
 - Voter + pour un commentaire sur un article
 - Page publique d'un utilisateur
 - Lien qui renvoit vers la page publique d'un utilisateur sur ses articles / commentaires

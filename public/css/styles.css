@@ -11,9 +11,12 @@ body {
     margin: auto;
 }
 
-.article {
+.article, .comment {
     background-color: #fff;
     border-radius: 10px 0 10px 0;
+}
+.article {
+    min-height: 300px;
 }
 
 a, a:hover {

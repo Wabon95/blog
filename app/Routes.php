@@ -34,4 +34,9 @@ $router->addRoutes([
     ['GET', '/article', 'App\Controllers\ArticleController#showAll'],
 ]);
 
+// Comment
+$router->addRoutes([
+    ['POST', '/article/ajouter-commentaire', 'App\Controllers\CommentController#addComment']
+]);
+
 return $router;

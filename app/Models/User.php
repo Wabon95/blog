@@ -37,6 +37,7 @@ class User extends Database {
     }
 
     public static function findByEmail(string $email) {
+        $email = htmlspecialchars($email);
         $db = Database::dbConnect();
         $sth = $db->prepare("SELECT * FROM `user` WHERE email = :email");
         $sth->bindParam(':email', $email, $db::PARAM_STR);
@@ -45,6 +46,8 @@ class User extends Database {
     }
 
     public static function connectUser(string $email, string $password) {
+        $email = htmlspecialchars($email);
+        $password = htmlspecialchars($password);
         if ($user = User::findByEmail($email)) {
             if (password_verify($password, $user->getPassword())) {
                 $_SESSION['user'] = [
