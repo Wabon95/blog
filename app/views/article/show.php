@@ -1,9 +1,3 @@
-<?php if (isset($user) && $user->getId() == $article->getAuthor()->getId()): ?>
-    <p class="text-right">
-        
-    </p>
-<?php endif; ?>
-
 <div class="article mb-4 p-3">
 
     <div class="row">
@@ -37,7 +31,7 @@
     </div>
 <form action="/article/ajouter" method="post">
 
-<?php foreach($comments as $comment): ?>
+<?php foreach($article->getComments() as $comment): ?>
     <div class="comment p-2 mb-2">
         <h5><?= $comment->getAuthor()->getNickname() ?> le <?= $comment->getFormatedDate() ?></h5>
         <p><?= $comment->getContent() ?></p>

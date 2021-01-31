@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Comment;
 use App\Utils\Database;
 use Cocur\Slugify\Slugify;
 use App\Utils\FlashMessages;
@@ -12,6 +13,7 @@ class Article extends Database {
     private string $title;
     private string $slug;
     private string $content;
+    private array $comments;
     private $author;
     private $created_at;
     private $updated_at;
@@ -38,7 +40,12 @@ class Article extends Database {
 
     public function update(int $id) {
         $db = Database::dbConnect();
-        $sth = $db->prepare("UPDATE `article` SET title = :title, slug = :slug, content = :content, updated_at = :updated_at WHERE article.id = $id");
+        $sql = "
+            UPDATE `article`
+            SET title = :title, slug = :slug, content = :content, updated_at = :updated_at
+            WHERE article.id = $id
+        ";
+        $sth = $db->prepare($sql);
         $this->updated_at = new \DateTime();
         $updated_at = $this->updated_at->format('Y-m-d H:i:s');
         $sth->bindParam(':title', $this->title, $db::PARAM_STR);
@@ -70,6 +77,7 @@ class Article extends Database {
                 ->setPassword($article->password)
             ;
             $article->setAuthor($author);
+            $article->setComments(Comment::findAllRelatedToAnArticle($article->getId()));
             $article->created_at = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at);
             return $article;
         }
@@ -150,6 +158,9 @@ class Article extends Database {
     public function getContent() {
         return $this->content;
     }
+    public function getComments() {
+        return $this->comments;
+    }
     public function getAuthor() {
         return $this->author;
     }
@@ -180,5 +191,8 @@ class Article extends Database {
     public function setAuthor(User $author) {
         $this->author = $author;
         return $this;
+    }
+    public function setComments(array $comments) {
+        $this->comments = $comments;
     }
 }

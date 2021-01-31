@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\User;
 use App\Models\Article;
-use App\Models\Comment;
 
 class ArticleController extends CoreController {
 
@@ -17,11 +16,9 @@ class ArticleController extends CoreController {
 
     public function show($articleSlug) {
         if ($article = Article::findBySlug($articleSlug)) {
-            $comments = Comment::findAllRelatedToAnArticle($article->getId());
             $this->render('article.show', [
                 'page_title' => $article->getTitle(),
-                'article' => $article,
-                'comments' => $comments
+                'article' => $article
             ]);
         } else {
             $this->redirect('/article');

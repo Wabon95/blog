@@ -55,7 +55,6 @@ class Comment extends Database {
         return $comments;
     }
 
-
     // GETTERS
     public function getId() {
         return $this->id;
