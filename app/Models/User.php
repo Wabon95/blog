@@ -15,7 +15,11 @@ class User extends Database {
         if (!$this->findByEmail($this->email)) {
             if ($this->validator()) {
                 $db = Database::dbConnect();
-                $sth = $db->prepare("INSERT INTO `user` (email, nickname, password) VALUES (:email, :nickname, :password)");
+                $sql = "
+                    INSERT INTO `user` (email, nickname, password)
+                    VALUES (:email, :nickname, :password)
+                ";
+                $sth = $db->prepare($sql);
                 $hashedPassword = password_hash($this->password, PASSWORD_BCRYPT);
                 $sth->bindParam(':email', $this->email, $db::PARAM_STR);
                 $sth->bindParam(':nickname', $this->nickname, $db::PARAM_STR);
@@ -30,7 +34,12 @@ class User extends Database {
 
     public static function find(int $id) {
         $db = Database::dbConnect();
-        $sth = $db->prepare("SELECT * FROM `user` WHERE id = :id");
+        $sql = "
+            SELECT *
+            FROM `user`
+            WHERE id = :id
+        ";
+        $sth = $db->prepare($sql);
         $sth->bindParam(':id', $id, $db::PARAM_INT);
         $sth->execute();
         return $sth->fetchObject(__CLASS__);
@@ -39,7 +48,12 @@ class User extends Database {
     public static function findByEmail(string $email) {
         $email = htmlspecialchars($email);
         $db = Database::dbConnect();
-        $sth = $db->prepare("SELECT * FROM `user` WHERE email = :email");
+        $sql = "
+            SELECT *
+            FROM `user`
+            WHERE email = :email
+        ";
+        $sth = $db->prepare($sql);
         $sth->bindParam(':email', $email, $db::PARAM_STR);
         $sth->execute();
         return $sth->fetchObject(__CLASS__);
