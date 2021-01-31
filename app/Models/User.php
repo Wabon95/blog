@@ -51,7 +51,9 @@ class User extends Database {
         if ($user = User::findByEmail($email)) {
             if (password_verify($password, $user->getPassword())) {
                 $_SESSION['user'] = [
+                    'id' => $user->getId(),
                     'email' => $user->getEmail(),
+                    'nickname' => $user->getNickname(),
                     'password' => $user->getPassword()
                 ];
                 return $user;
@@ -69,9 +71,16 @@ class User extends Database {
 
     public static function getConnectedUser() {
         if (isset($_SESSION['user'])) {
-            $user = User::findByEmail($_SESSION['user']['email']);
+            $user = new User();
+            $user
+                ->setId($_SESSION['user']['id'])
+                ->setEmail($_SESSION['user']['email'])
+                ->setNickname($_SESSION['user']['nickname'])
+                ->setPassword($_SESSION['user']['password'])
+            ;
             return $user;
         }
+        return false;
     }
 
     private function validator() {
