@@ -16,7 +16,11 @@ class Comment extends Database {
 
     public function insert() {
         $db = Database::dbConnect();
-        $sth = $db->prepare("INSERT INTO `comment` (content, author, article, created_at) VALUES (:content, :author, :article, :created_at)");
+        $sql = "
+            INSERT INTO `comment` (content, author, article, created_at)
+            VALUES (:content, :author, :article, :created_at)
+        ";
+        $sth = $db->prepare($sql);
         $this->created_at = new \DateTime();
         $createdAt = $this->created_at->format('Y-m-d H:i:s');
         $sth->bindParam(':content', $this->content, $db::PARAM_STR);
