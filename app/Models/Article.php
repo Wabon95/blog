@@ -20,7 +20,11 @@ class Article extends Database {
 
     public function insert() {
         $db = Database::dbConnect();
-        $sth = $db->prepare("INSERT INTO `article` (title, slug, content, author, created_at) VALUES (:title, :slug, :content, :author, :created_at)");
+        $sql = "
+            INSERT INTO `article` (title, slug, content, author, created_at)
+            VALUES (:title, :slug, :content, :author, :created_at)
+        ";
+        $sth = $db->prepare($sql);
         $this->created_at = new \DateTime();
         $createdAt = $this->created_at->format('Y-m-d H:i:s');
         if (!self::findBySlug($this->slug)) {
