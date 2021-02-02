@@ -147,6 +147,7 @@ class Article extends Database {
         $db = Database::dbConnect();
         $sth = $db->prepare("DELETE FROM `article` WHERE id = $id");
         $sth->execute();
+        FlashMessages::addMessage("Votre article à correctement été supprimé.", 'success');
     }
 
     // GETTERS

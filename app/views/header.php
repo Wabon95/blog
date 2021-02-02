@@ -3,14 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- CDN
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="../css/styles.css"> -->
-    <link rel="stylesheet" href="../js/jquery-3.5.1.min.js">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.5.1.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <title><?= $page_title ?></title>
 </head>
@@ -54,7 +50,8 @@
         <?php
             if (isset($flash_messages)) {
                 foreach ($flash_messages as $value) {
-                    echo '<div class="alert alert-' . $value['type'] . '" role="alert">' . $value['message'] . '</div>';
+                    echo '<div class="alert alert-' .$value['type']. ' alert-dismissible fade show" role="alert">' .$value['message']. '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
                 }
             }
         ?>
