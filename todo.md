@@ -4,7 +4,6 @@
 - Page publique d'un utilisateur
 - Lien qui renvoit vers la page publique d'un utilisateur sur ses articles / commentaires
 - Modification des informations de son profil, avec vérification de son mot de passe
-- Ajouter updated_at sur le model User
 - Pop-up de confirmation de suppression d'un article
 
 ## Fix / Debug
