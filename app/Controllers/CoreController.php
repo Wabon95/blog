@@ -11,8 +11,8 @@ class CoreController extends Database {
     protected function render(string $view, ?array $data) {
         $view = str_replace('.', '/', $view);
         extract($data);
-        $flash_messages = FlashMessages::getMessages();
-        $user = User::getConnectedUser();
+        $flash_messages = FlashMessages::getMessages() ? FlashMessages::getMessages() : null;
+        $user = User::getConnectedUser() ? User::getConnectedUser() : null;
         require_once __DIR__.'/../views/header.php';
         require_once __DIR__.'/../views/'.$view.'.php';
         require_once __DIR__.'/../views/footer.php';
