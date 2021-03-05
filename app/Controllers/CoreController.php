@@ -3,10 +3,9 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use App\Utils\Database;
 use App\Utils\FlashMessages;
 
-class CoreController extends Database {
+class CoreController {
 
     protected function render(string $view, ?array $data) {
         $view = str_replace('.', '/', $view);
